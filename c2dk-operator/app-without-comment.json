@@ -1,0 +1,114 @@
+{
+	"template_id": "1",
+	"template_version": "v1",
+	"app_name": "测试应用",
+	"app_code": "测试应用编码",
+	"app_describe": "测试应用描述",
+	"middleware": {},
+	"microservice": [{
+		"microservice_code": "c2dk-mysql",
+		"microservice_name": "c2dk数据库",
+		"microservice_tags": [{
+			"key": "app",
+			"value": "c2dk"
+		}],
+		"kind": "deployment",
+		"instance_count": 3,
+		"require_resource": {
+			"memory": "512Mi",
+			"cpu": 0
+		},
+		"limit_resource": {
+			"memory": "512Mi",
+			"cpu": 0
+		},
+		"labels": [{
+			"key": "app",
+			"value": "c2dk"
+		}],
+		"annotations": [{
+			"key": "app",
+			"value": "c2dk"
+		}],
+		"probes": [{
+			"initial_delay_second": 2,
+			"failure_threshold": 3,
+			"scheme": "tcp",
+			"success_threshold": 1,
+			"timeout_second": 30,
+			"period_second": 3,
+			"port": 3306,
+			"mode": "readiness",
+			"path": ""
+		}],
+		"artifact_info": {
+			"artifact_name": "test",
+			"artifact_code": "test",
+			"describe": "test",
+			"image": "",
+			"image_version": ""
+		},
+		"dep_service_map_list": [{
+				"microservice_code": "",
+				"attr_name": "microservice_host",
+				"attr_type": "system",
+				"attr_value": "DNS",
+				"describe": "系统默认注入DNS"
+			}
+
+		],
+		"connect_info_map_list": [{
+				"attr_name": "microservice_host",
+				"attr_type": "system",
+				"attr_value": "DNS",
+				"describe": "系统默认注入DNS"
+			},
+			{
+				"attr_name": "microservice_port",
+				"attr_type": "system",
+				"attr_value": "8888",
+				"describe": "与网络配置联动，系统默认注入集群内端口"
+			},
+			{
+				"attr_name": "MYSQL_ROOT_PASSWORD",
+				"attr_type": "",
+				"attr_value": "3306",
+				"describe": ""
+			}
+		],
+		"volume_info": {
+			"volumes": [{
+				"volume_name": "c2dk-mysql-data",
+				"volume_path": "/var/lib/mysql",
+				"volume_access_mode": "RWO"
+			}],
+			"configmaps": [{
+				"volume_name": "c2dk-mysql-config",
+				"configmap_context": [{
+					"key": "my.cnf",
+					"file_content": "test",
+					"volume_path": "/var/lib/mysql/my.conf",
+					"file_access_mode": "0777",
+					"subpath": "my.conf"
+				}]
+			}]
+		},
+		"port_map_list": [{
+			"port_name": "MYSQL",
+			"protocol": "tcp",
+			"container_port": 3306,
+			"node_port": 30001,
+			"is_outer_service": true,
+			"is_inner_service": true
+		}],
+		"env_map_list": [{
+			"attr_name": "test",
+			"attr_value": "test",
+			"attr_type": "",
+			"status": 0
+		}],
+		"cmd": "",
+		"args": "",
+		"language": "java"
+	}]
+}

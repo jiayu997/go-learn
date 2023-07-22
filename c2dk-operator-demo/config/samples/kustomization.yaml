@@ -1,0 +1,5 @@
+## Append samples of your project ##
+resources:
+- c2cloud_v1_c2app.yaml
+- c2cloud_v1_event.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

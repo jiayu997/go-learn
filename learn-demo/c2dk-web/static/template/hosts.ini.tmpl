@@ -1,0 +1,45 @@
+[[- define "host" -]]
+[master]
+[[ .Master ]] ansible_ssh_user=root ansible_ssh_port=[[ .SshPort ]] ansible_ssh_pass=[[ .SshPassword ]]
+
+[master-control-plane]
+[[- range $index,$value := .MasterControlPlane ]]
+[[ $value ]] ansible_ssh_user=root ansible_ssh_port=[[ $.SshPort ]] ansible_ssh_pass=[[ $.SshPassword ]]
+[[- end ]]
+
+
+[node]
+[[- range $index,$value := .Node ]]
+[[ $value ]] ansible_ssh_user=root ansible_ssh_port=[[ $.SshPort ]] ansible_ssh_pass=[[ $.SshPassword ]]
+[[- end ]]
+
+
+
+[nfs]
+[[ .NfsHarbor ]] ansible_ssh_user=root ansible_ssh_port=[[ .SshPort ]] ansible_ssh_pass=[[ .SshPassword ]]
+
+
+
+
+[vip]
+[[ .K8SVIP ]]
+
+
+
+[kube-cluster:children]
+master
+master-control-plane
+node
+
+[backup_client]
+
+[backup_server]
+[[ .Backup.IP ]]
+
+[backup:children]
+backup_server
+backup_client
+
+#[newnode]
+#172.24.1.78
+[[- end -]]

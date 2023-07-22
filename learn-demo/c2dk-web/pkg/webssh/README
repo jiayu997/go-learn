@@ -1,0 +1,4 @@
+原项目地址：https://github.com/myml/webssh
+修改地方：
+1. 对js进行修改，适配c2dk
+2. 对web-ssh.go进行修改，适配c2dk密码方式,连接方式基于context传递

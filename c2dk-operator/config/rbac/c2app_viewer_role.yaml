@@ -1,0 +1,27 @@
+# permissions for end users to view c2apps.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: c2app-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: c2dk-operator
+    app.kubernetes.io/part-of: c2dk-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: c2app-viewer-role
+rules:
+- apiGroups:
+  - c2dk.c2cloud.cn
+  resources:
+  - c2apps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - c2dk.c2cloud.cn
+  resources:
+  - c2apps/status
+  verbs:
+  - get

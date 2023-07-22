@@ -1,0 +1,7 @@
+### 请求方式
+1. 查询Deployment状态：curl -I -XGET -H "x-api-key: c2" "127.0.0.1:8000/c2app/deployment/status?name=kibana&namespace=logging"
+2. 查询pod状态: curl -I -XGET -H "x-api-key: c2" "127.0.0.1:8000/c2app/pod/status?name=coredns-78ff74fb8b-xz5pq&namespace=kube-system"
+3. 创建CRD
+```json
+
+```

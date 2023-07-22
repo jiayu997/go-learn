@@ -1,0 +1,443 @@
+{
+    "status": "success",
+    "data": {
+        "resultType": "vector",
+        "result": [
+            {
+                "metric": {
+                    "__name__": "node_uname_info",
+                    "container": "node-exporter",
+                    "domainname": "(none)",
+                    "endpoint": "http-metrics",
+                    "instance": "192.168.0.10:9100",
+                    "job": "node-exporter",
+                    "machine": "x86_64",
+                    "namespace": "monitor",
+                    "nodename": "k8s-master-1",
+                    "pod": "monitor-prometheus-node-exporter-p7h7k",
+                    "release": "5.4.191-1.el7.elrepo.x86_64",
+                    "service": "monitor-prometheus-node-exporter",
+                    "sysname": "Linux",
+                    "version": "#1 SMP Tue Apr 26 12:14:16 EDT 2022"
+                },
+                "value": [
+                    1662570003.644,
+                    "1"
+                ]
+            }
+        ]
+    }
+}
+
+
+
+
+
+
+{
+    "status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod6d31d23a_4d33_4bb7_ae6e_37b5964029b3.slice/docker-fe0514525a374a7e7d546bb218d467f159ef2b84162fde43ce9300dcc52dc54a.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_monitor-kube-state-metrics-5b65557bc7-j7tvx_monitor_6d31d23a-4d33-4bb7-ae6e-37b5964029b3_30",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "monitor-kube-state-metrics-5b65557bc7-j7tvx",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569889.079,
+                        "0.025213303"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-podb0fc5b45_d1d1_4f13_a188_f3db46628bc3.slice/docker-c0417fdc9438cba651db71e4a7e13e53b895837a096105be7118fd5083a60e43.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_metrics-server-68bdbcc6b-hqppq_kube-system_b0fc5b45-d1d1-4f13-a188-f3db46628bc3_29",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "metrics-server-68bdbcc6b-hqppq",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569894.040,
+                        "0.027833677"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podadd9d0ad_86a3_4814_8117_0d0931220cbe.slice/docker-36319d22528c48f17d18eb57b396e750ee4ebb49b28ceacdd3029194012d5ea5.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_kube-flannel-ds-w7t2j_kube-system_add9d0ad-86a3-4814-8117-0d0931220cbe_1",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "kube-flannel-ds-w7t2j",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569890.569,
+                        "0.127688946"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podc2cb1692_852b_4c02_9e10_ebad9b73f21e.slice/docker-2969dd071e01029150e88af59b18fc34953d9add788372f7930db3c4685a1303.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_coredns-7d9b46dfb8-q5zl6_kube-system_c2cb1692-852b-4c02-9e10-ebad9b73f21e_30",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "coredns-7d9b46dfb8-q5zl6",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569895.087,
+                        "0.024961879"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podcb7fa1bd_5341_4d6a_9123_7fc549a6edba.slice/docker-d83ee25aabcf531feb48d056ea4e87fbf7c05e9124d30e155eba4961fa903d79.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_coredns-7d9b46dfb8-4xs9c_kube-system_cb7fa1bd-5341-4d6a-9123-7fc549a6edba_31",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "coredns-7d9b46dfb8-4xs9c",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569893.584,
+                        "0.029907961"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podd8362def_d5d5_4bc4_8faa_73b7e6842151.slice/docker-2b6a29b1cb45aab492c2d422cc088ba76d2f1245a40707cca1ae4189795a936c.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_prometheus-monitor-kube-prometheus-st-prometheus-0_monitor_d8362def-d5d5-4bc4-8faa-73b7e6842151_28",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "prometheus-monitor-kube-prometheus-st-prometheus-0",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569892.927,
+                        "0.029652001"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "POD",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podec2e6ca9_b566_40ea_8830_b97fd9694999.slice/docker-909c9276b12ca6b02807654febc170755d4aac8734fb9509ed81aa3a6c50effb.scope",
+                    "image": "registry.aliyuncs.com/google_containers/pause:3.6",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_POD_alertmanager-monitor-kube-prometheus-st-alertmanager-0_monitor_ec2e6ca9-b566-40ea-8830-b97fd9694999_29",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "alertmanager-monitor-kube-prometheus-st-alertmanager-0",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569889.284,
+                        "0.024326737"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "config-reloader",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podd8362def_d5d5_4bc4_8faa_73b7e6842151.slice/docker-c453cbae8b1aa8b6c2b4c196b42ff506067b36a857f1c26f1def2a5b81191ded.scope",
+                    "image": "sha256:8cf7abb82445efc0ebf75dad04ef2c3308f830ebe4f6f09e4d18152b2c35ab71",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_config-reloader_prometheus-monitor-kube-prometheus-st-prometheus-0_monitor_d8362def-d5d5-4bc4-8faa-73b7e6842151_1",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "prometheus-monitor-kube-prometheus-st-prometheus-0",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569892.364,
+                        "0.622960448"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "coredns",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podc2cb1692_852b_4c02_9e10_ebad9b73f21e.slice/docker-3962b00e6e16feafc72edb0142cf20fc04dfe991ac782277bb86e9c54e0104e3.scope",
+                    "image": "sha256:bfe3a36ebd2528b454be6aebece806db5b40407b833e2af9617bf39afaff8c16",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_coredns_coredns-7d9b46dfb8-q5zl6_kube-system_c2cb1692-852b-4c02-9e10-ebad9b73f21e_1",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "coredns-7d9b46dfb8-q5zl6",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569887.397,
+                        "21.978128119"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "coredns",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podcb7fa1bd_5341_4d6a_9123_7fc549a6edba.slice/docker-6b75b778f4b1f4c545fcabc448c8e22ef48306ef195e8f6b18b393e717e65f13.scope",
+                    "image": "sha256:bfe3a36ebd2528b454be6aebece806db5b40407b833e2af9617bf39afaff8c16",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_coredns_coredns-7d9b46dfb8-4xs9c_kube-system_cb7fa1bd-5341-4d6a-9123-7fc549a6edba_1",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "coredns-7d9b46dfb8-4xs9c",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569893.115,
+                        "23.548293947"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "kube-state-metrics",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod6d31d23a_4d33_4bb7_ae6e_37b5964029b3.slice/docker-f2dfdf809147dc0ce5fb20a6b1aa7914528bc1f46d0c332451d602c447b3de70.scope",
+                    "image": "sha256:2a43dc5ae3a8b008335da2c75415adc05ebeea08f5990b87e2df113e5297a87a",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_kube-state-metrics_monitor-kube-state-metrics-5b65557bc7-j7tvx_monitor_6d31d23a-4d33-4bb7-ae6e-37b5964029b3_1",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "monitor-kube-state-metrics-5b65557bc7-j7tvx",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569891.676,
+                        "2.703239453"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "metrics-server",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-podb0fc5b45_d1d1_4f13_a188_f3db46628bc3.slice/docker-dee0edceee7934991c0503d3c7b9f665fd9423a4cf6f3eef1ed16577c78e7192.scope",
+                    "image": "sha256:9759a41ccdf0fd952d79c15da9f73b99ba5234c639e6223ad8c4931d27a50395",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_metrics-server_metrics-server-68bdbcc6b-hqppq_kube-system_b0fc5b45-d1d1-4f13-a188-f3db46628bc3_1",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "metrics-server-68bdbcc6b-hqppq",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569894.345,
+                        "22.477439341"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "node-exporter",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-podfc467b33_c005_4e1c_86f7_01fb3cb9ed37.slice/docker-1fb332e9218a2a38e3bc2d91fe538b37cd8e92304e7782587e8108a4758a85e6.scope",
+                    "image": "sha256:1dbe0e931976487e20e5cfb272087e08a9779c88fd5e9617ed7042dd9751ec26",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_node-exporter_monitor-prometheus-node-exporter-p7h7k_monitor_fc467b33-c005-4e1c-86f7-01fb3cb9ed37_0",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "monitor-prometheus-node-exporter-p7h7k",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569887.383,
+                        "6.807345858"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "prometheus",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podd8362def_d5d5_4bc4_8faa_73b7e6842151.slice/docker-ce332f8a6af633e732e00077984703dd0148a4be3b89f8c68304edd3e9c93808.scope",
+                    "image": "sha256:c3d2a0b3481ac5d8490b3f3dd67260cf295c70600cd9c7b434350fc8503e2d7a",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "k8s_prometheus_prometheus-monitor-kube-prometheus-st-prometheus-0_monitor_d8362def-d5d5-4bc4-8faa-73b7e6842151_1",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "prometheus-monitor-kube-prometheus-st-prometheus-0",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569893.259,
+                        "69.748447263"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod01ddcd81_7a70_45bc_beb6_399db802d283.slice",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "monitor-kube-prometheus-st-operator-7559448d86-vc2l8",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569889.036,
+                        "4.551196782"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod320e1a41_97d6_4c6c_a94d_37cdec0299b8.slice",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "namespace": "monitor",
+                    "node": "k8s-master-1",
+                    "pod": "monitor-grafana-99c94c4d4-ffm77",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569887.576,
+                        "14.066034793"
+                    ]
+                ]
+            },
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podadd9d0ad_86a3_4814_8117_0d0931220cbe.slice",
+                    "instance": "192.168.0.10:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "namespace": "kube-system",
+                    "node": "k8s-master-1",
+                    "pod": "kube-flannel-ds-w7t2j",
+                    "service": "monitor-kube-prometheus-st-kubelet"
+                },
+                "values": [
+                    [
+                        1662569893.943,
+                        "16.117993649"
+                    ]
+                ]
+            }
+        ]
+    }
+}

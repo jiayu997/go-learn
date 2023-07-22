@@ -1,0 +1,138 @@
+{
+    "template_id": "模版ID",//模版ID
+    "template_version": "v1",//模版版本
+    "app_name": "应用名称",
+    "app_code": "应用编码",
+    "app_describe": "应用描述",
+    "microservice": [//定义微服务，类型为list
+        {
+
+            "microservice_code":"",//微服务标识
+            "microservice_name": "",//微服务名称
+            "microservice_tags": [//微服务标签
+               {
+                "key":"",
+                "value":""
+               }
+            ],
+            "kind": "deployment",//k8s资源对象类型
+            "instance_count": 3,//实例数
+            "require_resource": {//配额需求定义
+                "memory": "512Mi",
+                "cpu": 0
+            },
+            "limit_resource": {//配额限制定义
+                "memory": "512Mi",
+                "cpu": 0
+            },
+            "labels":[//自定义标签
+                {
+                    "key":"",
+                    "value":""
+                }          
+            ],
+            "annotations"[//自定义注解
+                {
+                    "key":"",
+                    "value":""
+                }          
+            ],
+            "probes": [//就绪探针、存活探针定义 类型为list
+                {
+                    "initial_delay_second": 2,//初始延迟
+                    "failure_threshold": 3,//允许失败次数
+                    "scheme": "tcp",//协议
+                    "success_threshold": 1,//探测成功次数
+                    "timeout_second": 30,
+                    "period_second": 3,//间隔时间
+                    "port": 3306,
+                    "mode": "readiness",//readiness liveness
+                    "path": ""
+                }
+            ],
+            "artifact_info": {//制品信息
+                "artifact_name": "",//制品名称
+                "artifact_code": "",//制品编码
+                "describe": "",//制品描述
+                "image": "",//镜像坐标
+                "image_version": ""//镜像版本
+            },
+            "dep_service_map_list": [//依赖信息 
+                {
+                    "microservice_code": "",//被依赖微服务code
+                    "attr_name": "microservice_host",//名称
+                    "attr_type": "system",//类型（分为系统注入、自定义）
+                    "attr_value": "DNS",//值
+                    "describe": "系统默认注入DNS"//描述
+                }
+
+            ],
+            "connect_info_map_list": [//微服务需要对外暴露的连接信息,一个微服务创建成功后，将由系统默认暴露两种连接信息microservice_host，microservice_port
+                {
+                    "attr_name": "microservice_host",//名称
+                    "attr_type": "system",//类型（分为系统注入、自定义）
+                    "attr_value": "DNS",//值
+                    "describe": "系统默认注入DNS"//描述
+                },
+                {
+                    "attr_name": "microservice_port",//名称
+                    "attr_type": "system",//类型（分为系统注入、自定义）
+                    "attr_value": "",//值
+                    "describe": "与网络配置联动，系统默认注入集群内端口"//描述
+                },
+                {
+                    "attr_name": "MYSQL_ROOT_PASSWORD",//名称
+                    "attr_type": "",//类型（分为系统注入、自定义）
+                    "attr_value": "",//值
+                    "describe": ""//描述
+                }
+            ],
+            "storage": {//挂载信息 list类型（通过这里创建pv pvc configmap）
+            "volumes":[
+                {
+                    "volume_name": "",//存储卷名
+                    "volume_path": "/var/lib/mysql",//挂载的绝对路径
+                    "volume_access_mode": "RWO",//卷读写权限
+                }
+            ],
+            "configmaps":[
+                {
+                    "volume_name": "",//存储卷名
+                    "configmap_context_list":[
+                        {
+                           "key":"",
+                            "file_content": "",//挂载内容（适用于configmap类型）
+                            "volume_path": "/var/lib/mysql/my.conf",//挂载的绝对路径
+                            "file_access_mode": "0777",//文件读写权限
+                            "subpath":"my.conf"
+                        }
+                    ]
+                }
+            ]
+            },
+            "port_map_list": [//端口信息（通过这里创建service）
+                {
+                    "port_name": "MYSQL",//端口名称
+                    "protocol": "tcp",//端口协议
+                    "container_port": 3306,
+                    "node_port": 30001,
+                    "is_outer_service": true,//是否开放集群外端口
+                    "is_inner_service": true//是否开放集群内端口
+                }
+            ],
+            "env_map_list": [//环境变量信息
+                {
+                    "attr_name": "",
+                    "attr_value": "",
+                    "attr_type": "",//来源
+                    "status": 0 //操作状态
+                }
+            ],
+            "cmd": "", //自定义启动命令
+            "args":"",//自定义参数
+            "language": "java",//开发语音类型
+        }
+    ],
+    "middleware": {//中间件相关信息
+    }
+}

@@ -1,0 +1,198 @@
+[[- define "all" -]]
+############################################## 安装前请根据实际情况修改 ###############################
+# 选择安装的版本
+# # eg version: 2.9
+# # eg version: 3.0
+# # eg version: lite
+version: [[ .Version ]]
+
+# pod网段设置                             default=10.244.0.0/16
+pod_network_cidr: 172.20.0.0/16
+
+# docker网段设置                          default=192.168.244.1
+docker_bip: 192.168.244.1/24
+
+# docker数据存放路径                      default=/var/lib/docker
+docker_data_dir: /var/lib/docker
+
+# service 网段                            default=10.96.0.0/12
+service_cidr: 172.21.0.0/20
+
+#nfs配置,nfs共享路径(暂不支持修改路径，请勿修改)
+nfs_rootPath: /data/nfsshare
+nfs_ip: [[ .NfsHarbor ]]
+
+#  主节点和访问参数配置（注意只改ip）
+k8s_masterHost: "{{ groups['master'][0] }}"
+
+## harbor配置
+repository: goharbor
+harbor_ip: [[ .NfsHarbor ]]
+harbor_port: 30008
+
+# harbor密码请勿随意更改，如需更改需同步更改cce变量
+harbor_passwd: Kec12345
+hostPath: /data/harborData
+
+## 监控配置
+[[- if .Monitor.Enable ]]
+monitor_ip: [[ .Monitor.IP ]]
+[[- else ]]
+monitor_ip: 
+[[- end ]]
+
+## 统一日志配置,如果没有统一日志要求，这里可不填
+## 统一日志部署节点(所需三个节点,这三个节点会被打上clusters=log)
+pass_log_ip:
+[[- $length := len .Log.IP ]] [[ if eq $length 3 ]]
+[[- range $index,$value := .Log.IP ]]
+- [[ $value ]]
+[[- end ]]
+[[- end ]]
+
+## 是否开启备份,如果不需要备份，请设置成false
+[[- if .Backup.Enable ]]
+backup_status: true
+[[- else ]]
+backup_status: false
+[[- end ]]
+
+# server端备份路径
+backup_datadir: /data/backup
+
+
+################################## 非维护人员请不要更改下面配置 #################
+# docker 引擎配置  eg docker_driver: "systemd|cgroupfs"
+docker_driver: systemd
+
+# 业务配置
+namespace: admin
+cluster: admin
+
+master_ip: "{{ groups['master'][0] }}"
+
+registryhost: '{{ harbor_ip }}:{{ harbor_port }}'
+
+timeserver: "{{ groups['master'][0] }}"
+
+# 节点格式转换处理
+harbor_node: >-
+  {%- if harbor_ip != None -%}
+    {%- if harbor_ip in groups.master -%}
+      "{{ harbor_ip | replace('.','-') }}.master"
+    {%- elif harbor_ip in groups['master-control-plane'] -%}
+      "{{ harbor_ip | replace('.','-') }}.master"
+    {%- elif harbor_ip in groups['node'] -%}
+      "{{ harbor_ip | replace('.','-') }}.node"
+    {%- else -%}
+      ""
+    {%- endif -%}
+  {%- endif -%}
+
+monitor_node: >-
+  {%- if monitor_ip != None -%}
+    {%- if monitor_ip in groups.master -%}
+      "{{ monitor_ip | replace('.','-') }}.master"
+    {%- elif monitor_ip in groups['master-control-plane'] -%}
+      "{{ monitor_ip | replace('.','-') }}.master"
+    {%- elif monitor_ip in groups['node'] -%}
+      "{{ monitor_ip | replace('.','-') }}.node"
+    {%- else -%}
+      ""
+    {%- endif -%}
+  {%- endif -%}
+
+pass_log: >-
+  {%- set node = [] -%}
+  {%- for ip in pass_log_ip -%}
+    {%- if ip != None -%}
+      {%- if (ip in groups['master']) or (ip in groups['master-control-plane']) -%}
+        {{- node.append(ip | replace('.','-')|string + '.master') -}}
+      {%- elif ip in groups['node'] -%}
+        {{- node.append(ip | replace('.','-')|string + '.node') -}}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {{ node }}
+
+# local images url，本地离线镜像路径，默认工作目录路径是当前目录files
+k8s_image: images/kube-images.tgz
+harbor_image: images/harbor-images.tgz
+c2cloud_image: images/c2cloud-images.tgz
+monitor_image: images/monitor-images.tgz
+log_image: images/log-images.tgz
+
+k8s:
+  k8s-proxy: registry.c2cloud.cn/k8s/kube-proxy:v1.20.8
+  k8s-apiserver: registry.c2cloud.cn/k8s/kube-apiserver:v1.20.8
+  k8s-controller-manager: registry.c2cloud.cn/k8s/kube-controller-manager:v1.20.8
+  k8s-scheduler: registry.c2cloud.cn/k8s/kube-scheduler:v1.20.8
+  k8s-coredns: registry.c2cloud.cn/k8s/coredns:1.7.0
+  k8s-etcd: registry.c2cloud.cn/k8s/etcd:3.4.13-0
+  k8s-pause: registry.c2cloud.cn/k8s/pause:3.2
+  k8s-keepalived: registry.c2cloud.cn/k8s/keepalived:2.0.17
+  k8s-haproxy: registry.c2cloud.cn/k8s/haproxy:2.1.4
+  k8s-lvscare: registry.c2cloud.cn/k8s/lvscare:latest
+  k8s-flannel-cni: registry.c2cloud.cn/k8s/mirrored-flannelcni-flannel-cni-plugin:v1.0.0
+  k8s-flannel: registry.c2cloud.cn/k8s/flannel:v0.15.1
+  k8s-metric-server: registry.c2cloud.cn/k8s/metrics-server:v0.6.1
+
+# harbor image
+harbor:
+  harbor-chartmuseum: registry.c2cloud.cn/harbor/chartmuseum-photon:v2.1.6
+  harbor-clair-photon: registry.c2cloud.cn/harbor/clair-photon:v2.1.6
+  harbor-clair-adapter-photon: registry.c2cloud.cn/harbor/clair-adapter-photon:v2.1.6-dev
+  harbor-core: registry.c2cloud.cn/harbor/harbor-core:v2.1.6
+  harbor-database: registry.c2cloud.cn/harbor/harbor-db:v2.1.6
+  harbor-jobservice: registry.c2cloud.cn/harbor/harbor-jobservice:v2.1.6
+  harbor-nginx: registry.c2cloud.cn/harbor/nginx-photon:v2.1.6
+  harbor-notary-server: registry.c2cloud.cn/harbor/notary-server-photon:v2.1.6
+  harbor-notary-signal: registry.c2cloud.cn/harbor/notary-signer-photon:v2.1.6
+  harbor-portal: registry.c2cloud.cn/harbor/harbor-portal:v2.1.6
+  harbor-redis: registry.c2cloud.cn/harbor/redis-photon:v2.1.6
+  harbor-registry: registry.c2cloud.cn/harbor/registry-photon:v2.1.6
+  harbor-registryctl: registry.c2cloud.cn/harbor/harbor-registryctl:v2.1.6
+
+# 监控镜像列表
+monitor:
+# monitor/monitor-alarm-metrics chart
+  monitor-mas: registry.c2cloud.cn/c2cloud/monitor-alarm-service:2.8.1
+  monitor-mas-mysql: registry.c2cloud.cn/library/mysql:8.0.17
+
+  # monitor/kube-state-metrics chart
+  monitor-prometheus-node-exporter: registry.c2cloud.cn/admin/node-exporter:v1.2.2
+  monitor-kube-state-metrics: registry.c2cloud.cn/library/kube-state-metrics:2.2.0
+
+  # monitor/grafana chart
+  monitor-grafana: registry.c2cloud.cn/c2cloud/grafana:9.2.5
+  monitor-grafana-k8s-sidecar: registry.c2cloud.cn/admin/k8s-sidecar:1.12.3
+
+  # monitor
+  monitor-prometheus: registry.c2cloud.cn/admin/prometheus:v2.28.1
+  monitor-prometheus-alertmanager: registry.c2cloud.cn/admin/alertmanager:v0.22.2
+  monitor-prometheus-operator: registry.c2cloud.cn/admin/prometheus-operator:v0.50.0
+  monitor-prometheus-operator-certgen: registry.c2cloud.cn/library/kube-webhook-certgen:v1
+  monitor-prometheus-operator-config-reloader: registry.c2cloud.cn/admin/prometheus-config-reloader:v0.50.0
+
+  # other-image
+  monitor-pgs-exporter: registry.c2cloud.cn/library/postgres_exporter:v0.8.0
+  monitor-redis-exporter: registry.c2cloud.cn/library/redis_exporter:v1.3.5
+  monitor-mysql-exporter: registry.c2cloud.cn/library/mysqld-exporter:v0.12.1
+
+# 统一日志镜像列表
+log:
+  log-filebeat: registry.c2cloud.cn/library/filebeat:7.17.1
+  log-filebeat-export: registry.c2cloud.cn/library/beat-exporter:v0.4.0
+
+  log-kafka: registry.c2cloud.cn/library/kafka:3.1.0-debian-10-r14
+  log-kafka-kubectl: registry.c2cloud.cn/library/kubectl:1.23.3-debian-10-r13
+  log-kafka-export: registry.c2cloud.cn/library/kafka-exporter:1.4.2-debian-10-r140
+  log-zookeeper: registry.c2cloud.cn/library/zookeeper:3.7.0-debian-10-r265
+
+  log-logstach: registry.c2cloud.cn/library/logstash:7.17.1
+  log-logstach-export: registry.c2cloud.cn/library/logstash-exporter:7.3.0-debian-10-r428
+
+  log-elasticsearch: registry.c2cloud.cn/library/elasticsearch:7.17.0-debian-10-r11
+  log-elasticsearch-export: registry.c2cloud.cn/library/elasticsearch-exporter:1.3.0-debian-10-r100
+  log-elasticsearch-sysctl: registry.c2cloud.cn/library/bitnami-shell:10-debian-10-r328
+[[- end -]]

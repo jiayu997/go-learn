@@ -1,0 +1,14 @@
+apiVersion: c2dk.c2cloud.cn/v1
+kind: C2app
+metadata:
+  labels:
+    app.kubernetes.io/name: c2app
+    app.kubernetes.io/instance: c2app-sample
+    app.kubernetes.io/part-of: c2dk-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: c2dk-operator
+  name: c2app-sample
+spec:
+  # TODO(user): Add fields here
+  name: test
+  test: v1

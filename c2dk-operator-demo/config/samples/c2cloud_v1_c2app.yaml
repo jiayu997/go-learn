@@ -1,0 +1,178 @@
+apiVersion: c2cloud.c2cloud.cn/v1
+kind: C2app
+metadata:
+  labels:
+    app.kubernetes.io/name: c2app
+    app.kubernetes.io/instance: c2app-sample
+    app.kubernetes.io/part-of: c2dk-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: c2dk-operator
+  name: c2app-sample
+spec:
+  # TODO(user): Add fields here
+  # todo: configmap/secret
+  Name: "pms"
+  Operation: "create"
+  C2AppList:
+    - name: pms-mysql
+      namespace: admin
+      replicas: 1
+      priority: 100
+      labels:
+        app: pms-mysql
+      podSpec:
+        volumes:
+          - name: pms-mysql-init-sql
+            configMap:
+              defaultMode: 420
+              name: pms-mysql-init-sql
+              items:
+                - key: pms-mysql-init.sql
+                  path: pms-mysql-init.sql
+          - name: pms-mysql
+            persistentVolumeClaim:
+              claimName: pms-mysql
+        containers:
+          - name: pms-mysql
+            args:
+              - --max-connections=1000
+            env:
+              - name: MYSQL_ROOT_PASSWORD
+                value: Kc_pms888888
+            ports:
+              - name: port-3306
+                containerPort: 3306
+                protocol: TCP
+            image: mysql:8.0.33
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                cpu: "2"
+                memory: 4Gi
+              requests:
+                cpu: 200m
+                memory: 100Mi
+            volumeMounts:
+              - name: pms-mysql
+                mountPath: /var/lib/mysql
+              - name: pms-mysql-init-sql
+                mountPath: /docker-entrypoint-initdb.d/pms-mysql-init.sql
+                subPath: pms-mysql-init.sql
+            livenessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 60
+              periodSeconds: 20
+              successThreshold: 1
+              tcpSocket:
+                port: 3306
+              timeoutSeconds: 1
+      serviceSpec:
+        ports:
+          - name: port-3306
+            port: 3306
+            nodePort: 30132
+            targetPort: 8080
+        type: NodePort
+      configMapSpec:
+        - name: pms-mysql-init-sql
+          data:
+            pms-mysql-init.sql: |-
+              SET NAMES utf8mb4;
+              SET FOREIGN_KEY_CHECKS = 0;
+              CREATE DATABASE IF NOT EXISTS amp30 DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+        - name: pms-mysql-test
+          data:
+            pms-mysql-test: |-
+              this is test
+      secretSpec:
+        - name: pms-mysql-1
+          stringData:
+            ca.crt: "ca.crt"
+            ca.key: "ca.key"
+        - name: pms-mysql-2
+          stringData:
+            ca.crt: "ca.crt-2"
+            ca.key: "ca.key-2"
+      storageSpec:
+        - pvcName: pms-mysql
+          storageClassName: nfs-client
+    - name: pms-redis
+      namespace: admin
+      priority: 100
+      replicas: 1
+      labels:
+        app: pms-redis
+      podSpec:
+        containers:
+          - name: pms-redis
+            image: registry.c2cloud.cn/c2cloud/redis:6.0-arm
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 6379
+                protocol: TCP
+            resources:
+              limits:
+                cpu: 500m
+                memory: 512Mi
+      serviceSpec:
+        ports:
+          - name: port-6379
+            port: 6379
+            targetPort: 8080
+        type: ClusterIP
+    - name: pms-web
+      namespace: admin
+      priority: 50
+      replicas: 1
+      labels:
+        app: pms-web
+      podSpec:
+        containers:
+          - name: pms-web
+            image: busybox:latest
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/sh","-c","sleep 10000"]
+            ports:
+              - name: port-8080
+                containerPort: 8080
+                protocol: TCP
+              - name: port-9090
+                containerPort: 9090
+                protocol: TCP
+      serviceSpec:
+        ports:
+          - name: port-8080
+            port: 8080
+            targetPort: 8080
+          - name: port-9090
+            port: 9090
+            targetPort: 9090
+        type: ClusterIP
+    - name: pms-server
+      namespace: admin
+      replicas: 1
+      priority: 80
+      labels:
+        app: pms-server
+      podSpec:
+        containers:
+          - name: pms-server
+            image: busybox:latest
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/sh","-c","sleep 10000"]
+            ports:
+              - name: port-8080
+                containerPort: 8080
+                protocol: TCP
+              - name: port-9090
+                containerPort: 9090
+                protocol: TCP
+      serviceSpec:
+        ports:
+          - name: port-8080
+            port: 8080
+            targetPort: 8080
+          - name: port-9090
+            port: 9090
+            targetPort: 9090
+        type: ClusterIP

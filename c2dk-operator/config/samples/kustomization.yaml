@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- c2dk_v1_c2app.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

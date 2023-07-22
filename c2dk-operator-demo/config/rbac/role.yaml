@@ -1,0 +1,59 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - c2apps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - c2apps/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - c2apps/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - events
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - events/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - events/status
+  verbs:
+  - get
+  - patch
+  - update

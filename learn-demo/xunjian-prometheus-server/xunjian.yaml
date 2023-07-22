@@ -1,0 +1,82 @@
+# prometheus 配置
+prometheus:
+  ip: 192.168.0.10
+  port: 30003
+
+# 控制巡检开关
+controller:
+  pod: false           # pod 巡检
+  node: false          # node 巡检
+  resource: false      # k8s备份，dns 巡检
+  storage: false      # pvc & pv 巡检
+  businness: false     # 自定义巡检列表
+  harbor: true        # harbor 巡检
+  nfs: false          # nfs 巡检
+  mysql: false        # mysql 巡检
+  redis: false        # redis 巡检
+  pgs: false          # pgs 巡检
+  quota: false
+
+# 可选巡检列表
+checklist:
+  businness: # 目前只支持deployment控制器，暂不支持statulset和daemonsets
+  - type_name: 镜像仓库
+    name: harbor
+    namespace: harbor
+    controller: deployment
+    health_port: 8080
+    health_path: /readyz
+  - type_name: 镜像仓库数据库
+    name: harbor-database
+    namespace: harbor
+    controller: statefulset
+  - type_name:  flannel 网络插件
+    name: kube-flannel-ds
+    namespace: kube-system
+    controller: daemonset
+  harbor:
+  - type_name: 测试环境仓库
+    image: 192.168.0.10:30008/c2cloud/node-exporter:v1.3.0
+    ip: 192.168.0.10
+    port: 30008
+    username: admin
+    password: Harbor12345
+  - type_name: 公司生产环境仓库
+    ip: registry.c2cloud.cn
+    port: 443
+    username: admin
+    password: Kec12345
+  nfs:
+  - type_name: 公司生产环境NFS
+  - ip: 192.168.0.11
+    datadir: /data/nfsshare
+  - ip: 172.24.1.1
+    datadir: /data/nfsshare
+  mysql:
+  - type_name: 测试mysql1
+    ip: 192.168.0.10
+    port: 3306
+    username: root
+    password: password
+  - type_name: 测试mysql2 
+    ip: 172.24.1.2
+    port: 3306
+    username: root
+    password: testpassword
+  redis:
+  - type_name: 测试redis1
+    ip: 192.168.0.10
+    port: 6379
+  - ip: 192.168.0.11
+    port: 6379
+    password: redis
+  pgs:
+  - type_name: 测试pgs1
+    ip: 192.168.0.10
+    port: 5432
+    username: postgres
+    password: password
+  - ip: 192.168.0.11
+    port: 5432
+    username: root
+    password: root

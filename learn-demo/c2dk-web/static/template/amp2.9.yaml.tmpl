@@ -1,0 +1,145 @@
+[[- define "amp29" -]]
+################### 以下参数可按实际情况修改 ############################
+# route keeplived高可用配置
+[[- if .BusinVIP.Enable ]]
+vip: [[ .BusinVIP.IP ]]
+[[- else ]]
+vip: "{{ groups['master'][0] }}"
+[[- end ]]
+vip_interface: [[ .NetworkInterface ]]
+
+# ams mysql数据库配置
+database_ip: "{{ groups['master'][0] }}"
+database_nodePort: 30168
+database_password: Kc_ams888888
+database_username: root
+
+# 管理集群节点lable添加,cluster=admin和tenant=admin
+cluster_admin_ip:
+[[- $length := len .ClusterAdmin ]] [[ if ge $length 2 ]]
+[[- range $index,$value := .ClusterAdmin ]]
+- [[ $value ]]
+[[- end ]]
+[[- end ]]
+
+
+# keepalived高可用标签节点（建议三台，同一网段）
+c2Type_ha_ip:
+[[- $length := len .ClusterAdmin ]] [[ if ge $length 2 ]]
+[[- range $index,$value := .ClusterAdmin ]]
+- [[ $value ]]
+[[- end ]]
+[[- end ]]
+
+
+# 需要安装的模块(不需要安装的直接在前面加#号注释)
+# 统一日志模块，老filebeat+es废弃,采用新的统一日志模块
+c2cloud_app: 
+- harbor
+- ama
+- ams
+- apigateway
+- route
+- cce
+- uop-io
+- helm3-server
+[[- if .Log.Enable ]]
+- log
+[[- end ]]
+[[- if .Monitor.Enable ]]
+- monitor
+[[- end ]]
+#- apm
+
+##############################  非维护人员请不要修改下面配置，默认即可   ###################################
+## 节点名称处理
+cluster_admin: >-
+  {%- set node = [] -%}
+  {%- for ip in cluster_admin_ip -%}
+    {%- if ip != None -%}
+      {%- if (ip in groups['master']) or (ip in groups['master-control-plane']) -%}
+        {{- node.append(ip | replace('.','-')|string + '.master') -}}
+      {%- elif ip in groups['node'] -%}
+        {{- node.append(ip | replace('.','-')|string + '.node') -}}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {{ node }}
+
+c2Type_ha: >-
+  {%- set node = [] -%}
+  {%- for ip in c2Type_ha_ip -%}
+    {%- if ip != None -%}
+      {%- if (ip in groups['master']) or (ip in groups['master-control-plane']) -%}
+        {{- node.append(ip | replace('.','-')|string + '.master') -}}
+      {%- elif ip in groups['node'] -%}
+        {{- node.append(ip | replace('.','-')|string + '.node') -}}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {{ node }}
+
+## 机构用户管理平台配置（默认不安装,如需安装请改为true，并修改相应ip,端口保持不变）
+uop_enable: false
+
+## cce server 配置
+cluster_outer_vip: '{{ vip }}'
+env_init_cluster: admin
+ama_sso_client: http://{{ vip }}:30000
+ama_sso_server: http://{{ vip }}:30017
+uop_sso_client: http://{{ vip }}:31879
+uop_sso_server: http://{{ vip }}:30017
+
+c2cloud:
+  # c2cloud ama
+  c2-ama: registry.c2cloud.cn/c2cloud/application-management-admin:v2.9.0.1
+  c2-license-service: registry.c2cloud.cn/c2cloud/license-server:v1.0.2   #修复时间范围容忍
+
+  # c2cloud ams
+  c2-ams: registry.c2cloud.cn/c2cloud/application-management-server:v2.9.4.21
+  c2-ams-mysql: registry.c2cloud.cn/library/mysql:8.0.17                    
+  c2-ams-redis: registry.c2cloud.cn/c2cloud/redis:latest
+
+  # c2cloud apigateway
+  c2-apigateway: registry.c2cloud.cn/c2cloud/apigateway:v2.1.24-r5
+  c2-apigateway-postgres: registry.c2cloud.cn/c2cloud/postgres:9.6.9
+  c2-apigateway-postgres-init: registry.c2cloud.cn/c2cloud/postgres_init_api:v2.8.0
+
+  # c2cloud c2 route
+  c2-route: registry.c2cloud.cn/c2cloud/dynamic-routes:2.0.1-rc4
+  c2-route-pgs: registry.c2cloud.cn/c2cloud/postgres:9.6.9
+  c2-route-redis: registry.c2cloud.cn/c2cloud/redis:latest
+  c2-keepalived: registry.c2cloud.cn/c2cloud/keepalived:2.0.18              
+
+  # c2cloud cce
+  c2-cce-server: registry.c2cloud.cn/admin/container-engine-server:2.9.3.7
+  c2-cce-mysql-server: registry.c2cloud.cn/library/mysql:8.0.17
+
+  # c2cloud apm
+  c2-apm-pp-collector: registry.c2cloud.cn/c2cloud/pp-collector:v1.1.2
+  c2-apm-hbase: registry.c2cloud.cn/library/hbase:harisekhon
+  c2-apm-mysql: registry.c2cloud.cn/library/mysql:8.0.17
+  c2-apm-pp-web: registry.c2cloud.cn/c2cloud/pp-web:v1.1.3
+
+  # c2cloud uop io
+  c2-uop-io: registry.c2cloud.cn/c2cloud/unify-orguser-io-server:io-v2.1.6
+  c2-uop: registry.c2cloud.cn/c2cloud/user-organization-applications:v2.4.0.1
+
+  # helm3 server
+  c2-helm3-server: registry.c2cloud.cn/c2cloud/helm3-server:1.0.2
+
+  # env-init-v2.9
+  c2-env-amp: registry.c2cloud.cn/c2cloud/application-management-console:v2.9.1.8
+  c2-env-ams: registry.c2cloud.cn/c2cloud/application-management-server:v2.9.4.21
+  c2-env-ams-redis: registry.c2cloud.cn/c2cloud/redis:latest
+  c2-env-uop: registry.c2cloud.cn/c2cloud/user-organization-applications:v2.4.0.1
+  c2-env-uop-io: registry.c2cloud.cn/c2cloud/unify-orguser-io-server:io-v2.3.5
+  c2-env-gateway: registry.c2cloud.cn/c2cloud/apigateway:v2.1.24-r5 
+  c2-env-gateway-pgs: registry.c2cloud.cn/c2cloud/postgres:9.6.9
+  c2-env-route-pgs: registry.c2cloud.cn/c2cloud/postgres:9.6.9
+  c2-env-route: registry.c2cloud.cn/c2cloud/dynamic-routes:2.0.1-rc4
+
+# 该镜像废弃
+#c2-env-ams-mysql: registry.c2cloud.cn/library/mysql-ams:2.9.0
+
+[[- end -]]

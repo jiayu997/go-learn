@@ -1,0 +1,92 @@
+<!DOCTYPE>  
+<html>  
+	<head>  
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+		<link rel="stylesheet" href="/static/css/deploy.css" type="text/css" />
+		<title>自动部署页面</title>  
+	</head>  
+	<body>  
+		<div>
+	    	<h1>科创专有云产品自动初始化工具</h1>
+	    	<div id="form">
+				<div>
+					<div>
+						<label>部署版本</label>
+						<select name="version" id="version" style="width: 80px;">
+							<option value="2.9">amp2.9</option>
+							<option value="3.0">amp3.0</option>
+							<option value="lite">amplite</option>
+						</select>
+					</div>
+					<div>
+						<label>K8S主节点</label>
+						<input type="text" name="control" required="required" id="control" placeholder="支持多节点">
+					</div>
+					<div>
+						<label>NFS/镜像仓库节点</label>
+						<input type="text" name="nfsharbor" required="required" id="nfsharbor" placeholder="仅支持单节点">
+					</div>
+					<div>
+						<label>平台管理节点</label>
+						<input type="text" name="clusteradmin" required="required" id="clusteradmin" placeholder="支持多节点">
+					</div>
+					<div>
+						<label>监控告警节点</label>
+						<input type="text" name="monitor" placeholder="默认启用该组件,如关闭请勾选禁用" id="monitor"> 
+						<select name="monitor_status" id="monitor_status">
+							<option value="true">启用</option>
+							<option value="false">禁用</option>
+						</select>
+					</div>
+					<div>
+						<label>统一日志节点</label>
+						<input type="text" name="log" placeholder="默认启用该组件,如关闭请勾选禁用" id="log">
+						<select name="log_status" id="log_status">
+							<option value="true">启用</option>
+							<option value="false">禁用</option>
+						</select>
+					</div>
+					<div>
+						<label>备份工具服务端</label>
+						<input type="text" name="backup" placeholder="默认启用该组件,如关闭请勾选禁用" id="backup">
+						<select name="backup_status" id="backup_status">
+							<option value="true">启用</option>
+							<option value="false">禁用</option>
+						</select>
+					</div>
+					<div>
+						<label>业务高可用IP</label>
+						<input type="text" name="vip" placeholder="默认启用VIP,如关闭请勾选禁用" id="vip">
+						<select name="vip_status" id="vip_status">
+							<option value="true">启用</option>
+							<option value="false">禁用</option>
+						</select>
+					</div>
+					<div>
+						<label>单独部署平台组件</label>
+						<input type="text" name="component" placeholder="harbor|monitor|log|c2cloud" id="component">
+					</div>
+					<div>
+						<label>集群增加/删除节点</label>
+						<input type="text" name="node" placeholder="仅支持单节点操作" id="operatenode">
+					</div>
+				</div>
+				<div id="button" style="width: 510px;">
+					<input type="button" value="部署前检查" id="check">
+					<input type="button" value="部署平台" id="submit" disabled="true">
+					<input type="button" value="组件部署" id="component_status">
+					<input type="button" value="部署日志下载" id="downloadlog">
+					<input type="button" value="新增节点" id="addnode">
+					<input type="button" value="删除节点" id="deletenode">
+					<input type="button" value="POD状态查询" id="podstatus">
+					<input type="button" value="异常POD清理" id="deletepod">
+					<input type="button" value="DNS延时检查" id="dns">
+				</div>
+				<div id="logoutput">
+				</div>
+	    	</div>
+		</div>
+	</body>  
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/deploy.js"></script>
+</html>

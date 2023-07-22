@@ -1,0 +1,27 @@
+# permissions for end users to view events.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: event-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: c2dk-operator
+    app.kubernetes.io/part-of: c2dk-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: event-viewer-role
+rules:
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - events
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - c2cloud.c2cloud.cn
+  resources:
+  - events/status
+  verbs:
+  - get
