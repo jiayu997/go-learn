@@ -18,17 +18,40 @@ type C2DeploymentStatus struct {
 	PodStatus []C2PodStatus `json:"podstatus"`
 }
 
+func removeDuplicateDeployment(deploymentList []appsv1.Deployment) []appsv1.Deployment {
+	result := make([]appsv1.Deployment, 0)
+	for i := range deploymentList {
+		flag := true
+		for j := range result {
+			if deploymentList[i].Name == result[j].Name && deploymentList[i].Namespace == result[j].Namespace {
+				flag = false
+				break
+			}
+			if flag {
+				result = append(result, deploymentList[i])
+			}
+		}
+	}
+	return result
+}
+
 func deploymentValidate(deploymentList []appsv1.Deployment) error {
+	for _, deployment := range deploymentList {
+		if *deployment.Spec.Replicas >= 10 {
+			return errors.New(fmt.Sprintf("namespace: %s deployment: %s replicas is too much", deployment.Namespace, deployment.Name))
+		}
+	}
 	return nil
 }
 
 func GenerateDeploymentByC2app(c2app *c2dkv1.C2app) ([]appsv1.Deployment, error) {
 	// data validata
-	var deploymentList []appsv1.Deployment = make([]appsv1.Deployment, 0)
+	deploymentList := make([]appsv1.Deployment, 0)
 
 	for _, application := range c2app.Spec.ApplicationList {
-		var replicas int32 = application.Replicas // application address not change, can't use it direct
-		var deployment appsv1.Deployment = appsv1.Deployment{
+		application := application
+		replicas := application.Replicas // application address not change, can't use it direct
+		deployment := appsv1.Deployment{
 			TypeMeta: metav1.TypeMeta{
 				APIVersion: "apps/v1",
 				Kind:       "Deployment",
@@ -70,7 +93,7 @@ func CreateDeploymentWithPolicy(cli client.Client, deployment *appsv1.Deployment
 
 // create deployment
 func createDeploymentWithNoUpdate(cli client.Client, deployment *appsv1.Deployment) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(deployment)
+	objectKey := client.ObjectKeyFromObject(deployment)
 	var oldDeployment appsv1.Deployment
 
 	if err := cli.Get(context.TODO(), objectKey, &oldDeployment); err != nil {
@@ -90,7 +113,7 @@ func createDeploymentWithNoUpdate(cli client.Client, deployment *appsv1.Deployme
 
 // create deployment or update deployment
 func createOrUpdateDeployment(cli client.Client, deployment *appsv1.Deployment) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(deployment)
+	objectKey := client.ObjectKeyFromObject(deployment)
 	var oldDeployment appsv1.Deployment
 
 	// get old deployment

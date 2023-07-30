@@ -16,12 +16,13 @@ func pvcValidate(pvcList []corev1.PersistentVolumeClaim) error {
 }
 
 func GenerateStorageByC2app(c2app *c2dkv1.C2app) ([]corev1.PersistentVolumeClaim, error) {
-	var pvcList []corev1.PersistentVolumeClaim = make([]corev1.PersistentVolumeClaim, 0)
+	pvcList := make([]corev1.PersistentVolumeClaim, 0)
 	defaultRequest, _ := resource.ParseQuantity("1Gi")
 	defaultLimit, _ := resource.ParseQuantity("10Gi")
 	defaultStorageClass := STORAGE_CLASS_NFS
 
 	for _, application := range c2app.Spec.ApplicationList {
+		application := application
 		for _, storage := range application.StorageSpec {
 			var pvc corev1.PersistentVolumeClaim = corev1.PersistentVolumeClaim{
 				TypeMeta: metav1.TypeMeta{
@@ -29,9 +30,10 @@ func GenerateStorageByC2app(c2app *c2dkv1.C2app) ([]corev1.PersistentVolumeClaim
 					Kind:       "PersistentVolumeClaim",
 				},
 				ObjectMeta: metav1.ObjectMeta{
-					Name:      storage.PvcName,
-					Namespace: application.NameSpace,
-					Labels:    application.Labels,
+					Name:            storage.PvcName,
+					Namespace:       application.NameSpace,
+					Labels:          application.Labels,
+					OwnerReferences: NewOwnerReference(c2app),
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
 					AccessModes: []corev1.PersistentVolumeAccessMode{corev1.PersistentVolumeAccessMode(storage.AccessMode)},
@@ -54,7 +56,7 @@ func GenerateStorageByC2app(c2app *c2dkv1.C2app) ([]corev1.PersistentVolumeClaim
 }
 
 func CreatePvcWithNoPolicy(cli client.Client, pvc *corev1.PersistentVolumeClaim) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(pvc)
+	objectKey := client.ObjectKeyFromObject(pvc)
 	var oldPvc corev1.PersistentVolumeClaim
 	if err := cli.Get(context.TODO(), objectKey, &oldPvc); err != nil {
 		if client.IgnoreNotFound(err) == nil {

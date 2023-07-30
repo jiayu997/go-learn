@@ -17,6 +17,7 @@ func serviceValidate(serviceList []corev1.Service) error {
 func GenerateServiceByC2app(c2app *c2dkv1.C2app) ([]corev1.Service, error) {
 	serviceList := make([]corev1.Service, 0)
 	for _, application := range c2app.Spec.ApplicationList {
+		application := application
 		for serviceType, serviceSpec := range application.ServiceSpec {
 			if len(serviceSpec.Ports) > 0 {
 				service := corev1.Service{
@@ -55,7 +56,7 @@ func CreateServiceWithPolicy(cli client.Client, service *corev1.Service) error {
 }
 
 func createOrUpdateService(cli client.Client, service *corev1.Service) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(service)
+	objectKey := client.ObjectKeyFromObject(service)
 	var oldService corev1.Service
 
 	// get old service
@@ -82,7 +83,7 @@ func createOrUpdateService(cli client.Client, service *corev1.Service) error {
 }
 
 func createServiceWithNoUpdate(cli client.Client, service *corev1.Service) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(service)
+	objectKey := client.ObjectKeyFromObject(service)
 	var oldService corev1.Service
 	if err := cli.Get(context.TODO(), objectKey, &oldService); err != nil {
 		if client.IgnoreNotFound(err) == nil {

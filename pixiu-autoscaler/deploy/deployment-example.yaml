@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    hpa.caoyingjunz.io/minReplicas: "1"
+    hpa.caoyingjunz.io/maxReplicas: "3"
+    cpu.hpa.caoyingjunz.io/targetAverageUtilization: "60"
+  labels:
+    app: test1
+  name: test1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test1
+  template:
+    metadata:
+      labels:
+        app: test1
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        resources:
+          requests:
+            cpu: 1m
+            memory: 100Mi
+          limits:
+            cpu: 3m
+            memory: 400Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test1
+  name: test1
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: test1
+  type: ClusterIP

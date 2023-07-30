@@ -2,6 +2,8 @@ package resources
 
 import (
 	c2dkv1 "c2dk-operator/api/v1"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"os"
@@ -38,6 +40,42 @@ func NewOwnerReference(c2app *c2dkv1.C2app) []metav1.OwnerReference {
 			Kind:    c2app.Kind,
 		}),
 	}
+}
+
+func removeDuplicateObjectList(objectList []interface{}) ([]interface{}, error) {
+	var resultList []interface{}
+
+	if len(objectList) <= 0 {
+		return nil, nil
+	}
+
+	for i := range objectList {
+		flag := true
+		for j := range resultList {
+			switch objectList[i].(type) {
+			case appsv1.Deployment:
+			case corev1.Namespace:
+				object, _ := objectList[i].(corev1.Namespace)
+				result, _ := resultList[j].(corev1.Namespace)
+				if object.Name == result.Name {
+					flag = false
+					break
+				}
+			case corev1.Service:
+				object, _ := objectList[i].(corev1.Service)
+				result, _ := resultList[j].(corev1.Service)
+				if object.Name == result.Name && object.Namespace == object.Namespace {
+					flag = false
+					break
+				}
+			case corev1.ConfigMap:
+			case corev1.Secret:
+			case corev1.PersistentVolumeClaim:
+			}
+		}
+
+	}
+	return nil, nil
 }
 
 // get new client

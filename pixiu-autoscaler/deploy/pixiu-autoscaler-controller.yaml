@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pixiuautoscaler
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pixiuautoscaler
+rules:
+  - apiGroups:
+      - "*"
+    resources:
+      - horizontalpodautoscalers
+      - deployments
+      - statefulsets
+      - endpoints
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - delete
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pixiuautoscaler
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pixiuautoscaler
+subjects:
+  - kind: ServiceAccount
+    name: pixiuautoscaler
+    namespace: kube-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    pixiu.hpa.controller: pixiu-autoscaler-controller
+  name: pixiu-autoscaler-controller
+  namespace: kube-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      pixiu.hpa.controller: pixiu-autoscaler-controller
+  template:
+    metadata:
+      labels:
+        pixiu.hpa.controller: pixiu-autoscaler-controller
+    spec:
+      containers:
+        - image: jacky06/pixiu-autoscaler-controller
+          command:
+            - pixiu-autoscaler-controller
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 8
+            httpGet:
+              host: 127.0.0.1
+              path: /healthz
+              port: 10256
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 90Mi
+          name: pixiu-autoscaler-controller
+      serviceAccountName: pixiuautoscaler

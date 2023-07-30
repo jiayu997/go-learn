@@ -15,8 +15,9 @@ func configmapValidate(configmapList []corev1.ConfigMap) error {
 }
 
 func GenerateConfigMapByC2app(c2app *c2dkv1.C2app) ([]corev1.ConfigMap, error) {
-	var configMapList []corev1.ConfigMap = make([]corev1.ConfigMap, 0)
+	configMapList := make([]corev1.ConfigMap, 0)
 	for _, application := range c2app.Spec.ApplicationList {
+		application := application
 		for _, configInfo := range application.ConfigMapSpec {
 			var configmap corev1.ConfigMap = corev1.ConfigMap{
 				TypeMeta: metav1.TypeMeta{
