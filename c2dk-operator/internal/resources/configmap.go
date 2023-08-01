@@ -90,7 +90,7 @@ func createOrUpdateConfigMap(cli client.Client, configmap *corev1.ConfigMap) err
 }
 
 func createConfigMapWithNoUpdate(cli client.Client, configmap *corev1.ConfigMap) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(configmap)
+	objectKey := client.ObjectKeyFromObject(configmap)
 	var oldConfigMap corev1.ConfigMap
 	if err := cli.Get(context.TODO(), objectKey, &oldConfigMap); err != nil {
 		if client.IgnoreNotFound(err) == nil {

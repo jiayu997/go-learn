@@ -51,7 +51,7 @@ func GenerateStorageByC2app(c2app *c2dkv1.C2app) ([]corev1.PersistentVolumeClaim
 			pvcList = append(pvcList, pvc)
 		}
 	}
-
+	_ = pvcValidate(pvcList)
 	return pvcList, nil
 }
 

@@ -23,9 +23,9 @@ func GenerateNamespaceByC2app(c2app *c2dkv1.C2app) ([]corev1.Namespace, error) {
 				Kind:       "Namespace",
 			},
 			ObjectMeta: metav1.ObjectMeta{
-				Name:            application.NameSpace,
-				Labels:          application.Labels,
-				OwnerReferences: NewOwnerReference(c2app),
+				Name:   application.NameSpace,
+				Labels: application.Labels,
+				//OwnerReferences: NewOwnerReference(c2app), // don't use this
 			},
 		}
 		namespaceList = append(namespaceList, namespace)

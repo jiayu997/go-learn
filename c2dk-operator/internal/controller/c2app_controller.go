@@ -220,8 +220,8 @@ func (r *C2appReconciler) createOrUpdateDeployment(c2app *c2dkv1.C2app) error {
 				default:
 					_, err := resources.DeploymentStatusQuery(r.Client, client.ObjectKeyFromObject(&deployment))
 					if err != nil {
-						time.Sleep(time.Second * 15)
-						klog.Errorf("c2app: %s crd %s deployment namespace: %s name: %s health check failed will retry", c2app.Name, resources.UPDATE_POLICY, deployment.Namespace, deployment.Name)
+						time.Sleep(time.Second * 2)
+						//klog.Errorf("c2app: %s crd %s deployment namespace: %s name: %s health check failed will retry", c2app.Name, resources.UPDATE_POLICY, deployment.Namespace, deployment.Name)
 					} else {
 						klog.Infof("c2app: %s crd %s deployment namespace: %s name: %s health check success", c2app.Name, resources.UPDATE_POLICY, deployment.Namespace, deployment.Name)
 						break FOR
@@ -262,11 +262,38 @@ func (r *C2appReconciler) createStorageVolume(c2app *c2dkv1.C2app) error {
 	return nil
 }
 
+// create namespace
+func (r *C2appReconciler) createNamespace(c2app *c2dkv1.C2app) error {
+	namespaceList, err := resources.GenerateNamespaceByC2app(c2app)
+	if err != nil {
+		klog.Errorf("c2app: %s crd generate namespace list failed reason: %s", c2app.Name, err.Error())
+	} else {
+		klog.Infof("c2app: %s crd generate namespace list success", c2app.Name)
+	}
+
+	for _, namespace := range namespaceList {
+		namespace := namespace
+		if err := resources.CreateNamespaceWithNoPolicy(r.Client, &namespace); err != nil {
+			klog.Errorf("c2app: %s crd %s namespace: %s failed reason: %s", c2app.Name, resources.UPDATE_POLICY, namespace.Name, err.Error())
+			return err
+		} else {
+			klog.Infof("c2app: %s crd %s namespace: %s success", c2app.Name, resources.UPDATE_POLICY, namespace.Name)
+		}
+	}
+	return nil
+}
+
 func (r *C2appReconciler) operateResource(c2app *c2dkv1.C2app, req ctrl.Request) error {
 	// set crd status failed
 	_ = r.createOrUpdateCrdStatus(c2app, resources.STATUS_SUCCESS)
 
-	//// create or update configmap
+	// create namespace
+	if err := r.createNamespace(c2app); err != nil {
+		klog.Errorf("namespace %s failed", resources.UPDATE_POLICY)
+		return err
+	}
+
+	// create or update configmap
 	if err := r.createOrUpdateConfigMap(c2app); err != nil {
 		klog.Errorf("configmap %s failed", resources.UPDATE_POLICY)
 		return err
@@ -340,7 +367,16 @@ func (r *C2appReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 	// operate other resource base on crd resource
 	if err := r.operateResource(&C2app, req); err != nil {
-		// doesn't to handle it again
+		// need to delete crd
+		//if err := resources.DeleteC2app(r.Client, &C2app); err != nil {
+		//	klog.Errorf("c2app: %s create resource failed and delete failed", C2app.Name)
+		//	return ctrl.Result{}, err
+		//} else {
+		//	klog.Infof("c2app: %s create resource failed and delete success", C2app.Name)
+		//	return ctrl.Result{}, nil
+		//}
+
+		// don't delete it, please use api to delete it
 		return ctrl.Result{}, err
 	}
 

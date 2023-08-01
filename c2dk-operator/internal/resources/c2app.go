@@ -8,9 +8,32 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+func DeleteC2app(cli client.Client, c2app *c2dkv1.C2app) error {
+	objectKey := client.ObjectKeyFromObject(c2app)
+	var oldC2app c2dkv1.C2app
+
+	// get old c2app
+	err := cli.Get(context.TODO(), objectKey, &oldC2app)
+	if err != nil {
+		if err := client.IgnoreNotFound(err); err != nil {
+			return err
+		} else {
+			// c2app not exist
+			return nil
+		}
+	}
+
+	// c2app exist and delete it
+	if err := cli.Delete(context.TODO(), c2app); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
 // create or update c2pp
 func CreateOrUpdateC2app(cli client.Client, c2app *c2dkv1.C2app) error {
-	var objectKey client.ObjectKey = client.ObjectKeyFromObject(c2app)
+	objectKey := client.ObjectKeyFromObject(c2app)
 	var oldC2app c2dkv1.C2app
 
 	// get old c2app
