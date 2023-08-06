@@ -17,6 +17,7 @@ type Sets interface {
 	Equal(s2 Set) bool
 	List() []string
 	UnsortedList() []string
+	PopAny() (string, bool)
 }
 type Set map[string]Empty
 
