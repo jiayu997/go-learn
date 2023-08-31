@@ -27,11 +27,16 @@ type EventWatcher struct {
 	metricsStore       *metrics.Store
 }
 
+// 初始化event watcher
 func NewEventWatcher(config *rest.Config, namespace string, MaxEventAgeSeconds int64, metricsStore *metrics.Store, fn EventHandler, omitLookup bool) *EventWatcher {
 	clientset := kubernetes.NewForConfigOrDie(config)
+	// 生成一个factory
 	factory := informers.NewSharedInformerFactoryWithOptions(clientset, 0, informers.WithNamespace(namespace))
+
+	// 生成一个event informer(原生的)
 	informer := factory.Core().V1().Events().Informer()
 
+	// 对watcher进行了一次封装，事件用的是原始的
 	watcher := &EventWatcher{
 		informer:           informer,
 		stopper:            make(chan struct{}),
@@ -43,7 +48,9 @@ func NewEventWatcher(config *rest.Config, namespace string, MaxEventAgeSeconds i
 		metricsStore:       metricsStore,
 	}
 
+	// 添加事件处理
 	informer.AddEventHandler(watcher)
+
 	informer.SetWatchErrorHandler(func(r *cache.Reflector, err error) {
 		watcher.metricsStore.WatchErrors.Inc()
 	})
@@ -52,6 +59,7 @@ func NewEventWatcher(config *rest.Config, namespace string, MaxEventAgeSeconds i
 }
 
 func (e *EventWatcher) OnAdd(obj interface{}) {
+	// 获取k8s 原生event obj
 	event := obj.(*corev1.Event)
 	e.onEvent(event)
 }
@@ -83,7 +91,9 @@ func (e *EventWatcher) isEventDiscarded(event *corev1.Event) bool {
 	return false
 }
 
+// 对k8s原生event进行处理(这里似乎有版本区分了,event在1.27好像不属于core/v1下面了)
 func (e *EventWatcher) onEvent(event *corev1.Event) {
+	// 对部分事件丢弃
 	if e.isEventDiscarded(event) {
 		return
 	}
@@ -98,6 +108,7 @@ func (e *EventWatcher) onEvent(event *corev1.Event) {
 	e.metricsStore.EventsProcessed.Inc()
 
 	ev := &EnhancedEvent{
+		//封装事件
 		Event: *event.DeepCopy(),
 	}
 	ev.Event.ManagedFields = nil
@@ -131,6 +142,8 @@ func (e *EventWatcher) onEvent(event *corev1.Event) {
 		}
 	}
 
+	// 将事件丢给engine event处理了
+	// func (e *Engine) OnEvent(event *kube.EnhancedEvent
 	e.fn(ev)
 }
 
@@ -138,6 +151,7 @@ func (e *EventWatcher) OnDelete(obj interface{}) {
 	// Ignore deletes
 }
 
+// start informer
 func (e *EventWatcher) Start() {
 	go e.informer.Run(e.stopper)
 }

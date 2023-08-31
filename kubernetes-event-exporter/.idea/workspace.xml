@@ -5,16 +5,85 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5645ccf4-5665-425b-8883-cae30edb75b5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/test/config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/src.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../interface/demo1.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/config.example.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/deploy/02-deployment.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/go.sum" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/batch/writer.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/batch/writer_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/channel_registry.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/config_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/engine.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/engine_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/route.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/route_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/rule.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/rule_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/exporter/sync_registry.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/annotations.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/client.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/event.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/event_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/labels.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/leaderelection.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/objects.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/watcher.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/kube/watcher_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/metrics/metrics.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/setup/setup.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/setup/setup_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/avro.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/bigquery.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/elasticsearch.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/eventbridge.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/file.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/firehose.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/kafka.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/kinesis.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/loki.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/opensearch.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/opscenter.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/opscenter_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/opsgenie.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/pipe.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/pubsub.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/receiver.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/sink.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/slack.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/sns.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/sqs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/stdout.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/syslog.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/teams.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/teams_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/tmpl.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/tmpl_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../k8s-event-exporter/pkg/sinks/webhook.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/kube/watcher.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/kube/watcher.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
@@ -31,25 +100,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/jiayu/Documents/go-dev/src/k8s-event-exporter",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/jiayu/Documents/go-dev/src/kubernetes-event-exporter&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.vgo&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VgoProject">
-    <integration-enabled>false</integration-enabled>
+    <environment>
+      <map>
+        <entry key="GO111MODULE" value="on" />
+      </map>
+    </environment>
     <settings-migrated>true</settings-migrated>
   </component>
 </project>

@@ -17,6 +17,7 @@ import (
 )
 
 var (
+	// -conf=/data/config.yaml 指定配置文件
 	conf       = flag.String("conf", "config.yaml", "The config path file")
 	addr       = flag.String("metrics-address", ":2112", "The address to listen on for HTTP requests.")
 	kubeconfig = flag.String("kubeconfig", "", "Path to the kubeconfig file to use.")
@@ -27,6 +28,8 @@ func main() {
 	flag.Parse()
 
 	log.Info().Msg("Reading config file " + *conf)
+
+	// 读取配置文件
 	configBytes, err := os.ReadFile(*conf)
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot read config file")
@@ -34,6 +37,7 @@ func main() {
 
 	configBytes = []byte(os.ExpandEnv(string(configBytes)))
 
+	// 解析配置文件
 	cfg, err := setup.ParseConfigFromBites(configBytes)
 	if err != nil {
 		log.Fatal().Msg(err.Error())
@@ -50,6 +54,7 @@ func main() {
 		log.Logger = log.With().Caller().Logger().Level(zerolog.InfoLevel)
 	}
 
+	// 日志格式配置
 	if cfg.LogFormat == "json" {
 		// Defaults to JSON already nothing to do
 	} else if cfg.LogFormat == "" || cfg.LogFormat == "pretty" {
@@ -62,22 +67,29 @@ func main() {
 		log.Fatal().Str("log_format", cfg.LogFormat).Msg("Unknown log format")
 	}
 
+	// 配置文件验证
 	if err := cfg.Validate(); err != nil {
 		log.Fatal().Err(err).Msg("config validation failed")
 	}
 
+	// 获取config
 	kubecfg, err := kube.GetKubernetesConfig(*kubeconfig)
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot get kubeconfig")
 	}
+
 	kubecfg.QPS = cfg.KubeQPS
 	kubecfg.Burst = cfg.KubeBurst
 
+	// 初始化metrics
 	metrics.Init(*addr, *tlsConf)
 	metricsStore := metrics.NewMetricsStore(cfg.MetricsNamePrefix)
 
 	engine := exporter.NewEngine(&cfg, &exporter.ChannelBasedReceiverRegistry{MetricsStore: metricsStore})
+
 	onEvent := engine.OnEvent
+
+	// 这里对原有event进行了一次封装
 	if len(cfg.ClusterName) != 0 {
 		onEvent = func(event *kube.EnhancedEvent) {
 			// note that per code this value is not set anywhere on the kubernetes side
@@ -95,6 +107,7 @@ func main() {
 		l, err := kube.NewLeaderElector(cfg.LeaderElection.LeaderElectionID, kubecfg,
 			func(_ context.Context) {
 				log.Info().Msg("leader election got")
+				// 启动informer开始获取事件了
 				w.Start()
 			},
 			func() {
@@ -107,6 +120,7 @@ func main() {
 		}
 		go l.Run(ctx)
 	} else {
+		// 启动informer开始获取事件了
 		w.Start()
 	}
 

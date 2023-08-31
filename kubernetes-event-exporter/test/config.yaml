@@ -1,0 +1,17 @@
+logLevel: error
+logFormat: json
+route:
+  routes:
+    - match:
+        - receiver: "stdout"
+receivers:
+  - name: "stdout"
+    stdout: {}
+  - name: "dump"
+    elasticsearch:
+      hosts:
+        - http://c2-elasticsearch-coordinating-only.logging.svc.cluster.local:9200
+      index: kube-events
+      indexFormat: "kube-events-{2006-01-02}"
+      useEventID: true
+      deDot: true
