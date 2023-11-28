@@ -1,0 +1,12 @@
+#编译阶段
+FROM registry.c2cloud.cn/library/arm64v8-golang:1.14.15-alpine
+
+MAINTAINER tyf <yifan.tan@chinacreator.com>
+
+#复制源码到GOPATH路径下
+COPY ./src/. /usr/local/go/src
+
+#编译Linux可执行文件
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 GOARM=6 go build -o main  /usr/local/go/src/chinacreator.com/c2/license/licserver.go
+
+ENTRYPOINT ["/main"]

@@ -1,0 +1,63 @@
+# go 项目的CI过程仅仅包含编译阶段
+stages:
+  - build_image
+  - build_arm_image
+
+# 编译全局变量定义
+variables:
+  # Docker私有仓库地址
+  REGISTRY_URL: "registry.c2cloud.cn"
+  # Docker私有仓库地址
+  TENANT: "c2cloud"
+  # 镜像名称(一般直接使用项目名称)
+  # FIXME: 起好名字
+  PROJECT_NAME: "license-server"
+
+# 编译release分支的镜像，release分支是用于发布的分支，系统集成测试在这个分支做
+# TODO 编译分支的镜像需要手动清理
+build_release_docker_images:
+  stage: build_image
+  tags:
+    - docker
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u jcptrjb -p Harbor12345 $REGISTRY_URL
+  script:
+    # 使用编译id作为镜像tag，而不是分支名称，避免重复导致仓库中有很多无id的镜像
+    # FIXME：根据项目目录结构配置
+    - docker build -t $REGISTRY_URL/$TENANT/$PROJECT_NAME:release.$CI_BUILD_ID .
+    - docker push $REGISTRY_URL/$TENANT/$PROJECT_NAME:release.$CI_BUILD_ID
+  only: 
+    - /^release/.*$/
+
+# 编译正式版本镜像，只有在打tag时触发，会自动生成docker镜像并push到私服，镜像的tag即git的tag名称
+build_tag_docker_images:
+  stage: build_image
+  tags:
+    - docker
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u jcptrjb -p Harbor12345 $REGISTRY_URL
+  script:
+    # tag名称中不能包含/
+    # FIXME：根据项目目录结构配置
+    - docker build -t $REGISTRY_URL/$TENANT/$PROJECT_NAME:$CI_BUILD_TAG .
+    - docker push $REGISTRY_URL/$TENANT/$PROJECT_NAME:$CI_BUILD_TAG
+  only: 
+    - tags
+
+# 编译正式版本ARM镜像，只有在打tag时触发，会自动生成docker镜像并push到私服，镜像的tag即git的tag名称
+build_tag_docker_arm_images:
+  stage: build_arm_image
+  tags:
+    - arm64_local_build
+  before_script:
+    - sudo docker login -u jcptrjb -p Harbor12345 $REGISTRY_URL
+  script:
+    # tag名称中不能包含/
+    - sudo docker build -t $REGISTRY_URL/$TENANT/$PROJECT_NAME:$CI_BUILD_TAG-arm -f Dockerfile-ARM .
+    - sudo docker push $REGISTRY_URL/$TENANT/$PROJECT_NAME:$CI_BUILD_TAG-arm
+  only: 
+    - tags
